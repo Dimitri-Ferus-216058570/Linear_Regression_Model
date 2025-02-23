@@ -28,7 +28,20 @@ fn generate_data(samples: usize) -> (Vec<f32>, Vec<f32>) {
 struct LinearRegression<B:Backend> {
     linear: Linear<B>,
 }
+
 //computes predictions
+impl<B:Backend> LinearRegression<B> {
+    fn forward(&self, x: Tensor<B, 2>) -> Tensor<B, 2> {
+        self.linear.forward(x)
+    }
+}
+//main call to execute the program: create the dataset and display the results
 fn main() {
-    println!("Hello, world!");
+    let (x_data, y_data) = generate_data(100);
+    let mut points: Vec<(f32, f32)> = x_data.iter().zip(y_data.iter()).map(|(x, y)| (*x, *y)).collect();
+
+    println!("Training data plot");
+    Chart::new(100, 30, 0.0, 10.0)
+        .lineplot(&Shape::Points(&points))
+        .display();
 }
